@@ -9,6 +9,8 @@ import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { useContext } from 'react'
 import { HomeContext } from '../../Context'
+import { Link } from 'react-router-dom'
+import { PrivateRoutes } from '@/routes'
 
 const JobForYouCard = () => {
   const { jobs, isLoading } = useContext(HomeContext)
@@ -33,8 +35,8 @@ const JobForYouCard = () => {
                     <Chip color='success' label={job.attributes.country} />
                   </Stack>
                   <CardActions>
-                    <Button sx={{ display: 'flex', justifyItems: 'end' }} size='small'>
-                      See Details
+                    <Button variant='text' sx={{ display: 'flex', justifyItems: 'end' }} size='small'>
+                      <Link to={PrivateRoutes.JOBS}>See More</Link>
                     </Button>
                   </CardActions>
                 </Box>
