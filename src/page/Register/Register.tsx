@@ -16,7 +16,7 @@ import * as Yup from 'yup'
 export interface RegisterInterface {}
 
 const Register: React.FC<RegisterInterface> = () => {
-  const { data: seniorities } = useGetSenioritiesQuery()
+  const { data: seniorities, isLoading } = useGetSenioritiesQuery()
   const [register, result] = useRegisterMutation()
   const navigate = useNavigate()
   const user = useAuth()
@@ -54,6 +54,7 @@ const Register: React.FC<RegisterInterface> = () => {
     },
   })
   let content
+  if (isLoading) content = <MenuItem> loading...</MenuItem>
   if (seniorities)
     content = seniorities.data?.map((seniority) => (
       <MenuItem key={seniority.id} value={seniority.attributes.name}>
