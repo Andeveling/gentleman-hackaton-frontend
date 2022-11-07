@@ -2,7 +2,7 @@ import { useAppDispatch, useAuth } from '@/hooks'
 import { setCredentials } from '@/redux/login/authSlice'
 import { useLoginMutation } from '@/redux/login/loginApiSlice'
 import { PrivateRoutes, PublicRoutes } from '@/routes'
-import { Button } from '@mui/material'
+import { Button, CircularProgress } from '@mui/material'
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import Grid from '@mui/material/Grid'
@@ -12,10 +12,10 @@ import { useFormik } from 'formik'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import * as Yup from 'yup'
-export interface LoginInterface {}
+import { loginSchema } from './schemas/login-form-schema'
 
-const Login: React.FC<LoginInterface> = () => {
-  const [login, { data, isSuccess }] = useLoginMutation()
+const Login = () => {
+  const [login, { data, isSuccess, isLoading }] = useLoginMutation()
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const user = useAuth()
@@ -24,10 +24,7 @@ const Login: React.FC<LoginInterface> = () => {
       email: '',
       password: '',
     },
-    validationSchema: Yup.object({
-      email: Yup.string().email('Invalid email').required('Required'),
-      password: Yup.string().required('No password provided.'),
-    }),
+    validationSchema: loginSchema,
     onSubmit: (values) => {
       login(values)
         .unwrap()
@@ -81,7 +78,7 @@ const Login: React.FC<LoginInterface> = () => {
             </Grid>
             <Grid item xs={12}>
               <Button size='large' fullWidth type='submit' variant='contained'>
-                Iniciar
+                {isLoading ? <CircularProgress color='inherit' /> : 'Iniciar'}
               </Button>
             </Grid>
             <Grid item xs={12}>

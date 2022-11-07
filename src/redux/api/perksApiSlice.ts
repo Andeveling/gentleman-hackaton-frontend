@@ -1,5 +1,6 @@
 import { apiSlice } from './apiSlice'
 import { Endpoints } from './endpoints'
+import { config } from '@/config'
 
 export interface PerksResponse {
   data: PerksI[]
@@ -27,7 +28,7 @@ export const perksApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getPerks: builder.query<PerksResponse, void>({
       query: () => ({
-        url: Endpoints.PERKS,
+        url: 'https://www.getonbrd.com/api/v0/perks'.replace(config.API_BASE_URL, ''),
       }),
     }),
   }),

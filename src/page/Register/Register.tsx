@@ -1,4 +1,3 @@
-import { useAuth } from '@/hooks'
 import { useGetSenioritiesQuery } from '@/redux/api/senioritiesApiSlice'
 import { useRegisterMutation } from '@/redux/register/registerApiSlice'
 import { PrivateRoutes, PublicRoutes } from '@/routes'
@@ -9,9 +8,9 @@ import Grid from '@mui/material/Grid'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import { useFormik } from 'formik'
-import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import * as Yup from 'yup'
+import { registerSchema } from './schemas'
 
 export interface RegisterInterface {}
 
@@ -19,7 +18,7 @@ const Register: React.FC<RegisterInterface> = () => {
   const { data: seniorities, isLoading } = useGetSenioritiesQuery()
   const [register, result] = useRegisterMutation()
   const navigate = useNavigate()
-  const user = useAuth()
+
   const formik = useFormik({
     initialValues: {
       firstName: '',
@@ -29,17 +28,7 @@ const Register: React.FC<RegisterInterface> = () => {
       password2: '',
       seniority: '',
     },
-    validationSchema: Yup.object({
-      firstName: Yup.string().max(15, 'Must be 15 characters or less').required('Required'),
-      lastName: Yup.string().max(15, 'Must be 15 characters or less').required('Required'),
-      email: Yup.string().email('Invalid email').required('Required'),
-      seniority: Yup.string().required(),
-      password1: Yup.string().min(6, '6 catacteres como minimo').required('No password provided.'),
-      password2: Yup.string()
-        .min(6, '6 catacteres como minimo')
-        .oneOf([Yup.ref('password1'), null], 'Passwords must match')
-        .required('Required'),
-    }),
+    validationSchema: registerSchema,
     onSubmit: ({ email, lastName, firstName, password1, password2, seniority }) => {
       register({
         email,
@@ -164,7 +153,7 @@ const Register: React.FC<RegisterInterface> = () => {
             <Grid item xs={12}></Grid>
             <Grid item xs={12}>
               <Button size='large' fullWidth type='submit' variant='contained'>
-                {result.isLoading ? <CircularProgress /> : 'enviar'}
+                {result.isLoading ? <CircularProgress color='inherit' /> : 'enviar'}
               </Button>
             </Grid>
             <Grid item xs={12}>
